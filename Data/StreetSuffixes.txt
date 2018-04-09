@@ -1,0 +1,12 @@
+ave
+blvd
+cir
+court
+ct
+ctr
+drive
+drv
+lane
+ln
+pkwy
+st

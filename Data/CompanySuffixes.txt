@@ -1,0 +1,6 @@
+inc
+llc
+ltd
+corp
+incorp
+plc
