@@ -1,21 +1,17 @@
-﻿using DataRandomizer.Extensions;
-using DataRandomizer.Properties;
+﻿using DataRandomizer.Classes;
+using DataRandomizer.Extensions;
 using Microsoft.SqlServer.Server;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using DataRandomizer.Classes;
-using System.Text;
 using System.IO;
+using System.Linq;
+using System.Text;
 
 public partial class UserDefinedFunctions
 {
-    private static string NotInitializedMessage = "The DataRandomizer is not initialized. Call [EXEC InitializeRandom 'N:\\DataPath'] to initialize the random data set.";
-
+    private static string NotInitializedMessage = "The DataRandomizer is not initialized. Call [InitializeRandom] to initialize the random data set. (Example: EXEC InitializeRandom 'C:\\DataPath')";
     private static bool initialized = false;
-
     private static Random random = null;
 
     private static List<string> words = null;
@@ -171,6 +167,13 @@ public partial class UserDefinedFunctions
     }
 
     [SqlFunction]
+    public static bool IsInitialized()
+    {
+
+        return initialized;
+    }
+
+    [SqlFunction]
     public static string GetRandomCompanyName()
     {
         if (initialized == false)
@@ -258,6 +261,49 @@ public partial class UserDefinedFunctions
     }
 
     [SqlFunction]
+    public static string GetRandomAlphaString(int length)
+    {
+        if (initialized == false)
+        {
+            throw new Exception(NotInitializedMessage);
+        }
+
+        string result = string.Empty;
+
+        while (result.Length < length)
+        {
+            if (FlipCoin())
+            {
+                result += (char)random.Next(65, 90);
+            }
+            else
+            {
+                result += (char)random.Next(97, 122);
+            }
+        }
+
+        return result.Substring(0, length);
+    }
+
+    [SqlFunction]
+    public static string GetRandomString(int length)
+    {
+        if (initialized == false)
+        {
+            throw new Exception(NotInitializedMessage);
+        }
+
+        string result = string.Empty;
+
+        while (result.Length < length)
+        {
+            result += (char)random.Next(32, 126);
+        }
+
+        return result.Substring(0, length);
+    }
+
+    [SqlFunction]
     public static string GetRandomNumberStringLengthBetween(int minLength, int maxLength)
     {
         if (initialized == false)
@@ -271,6 +317,51 @@ public partial class UserDefinedFunctions
         while (result.Length < length)
         {
             result += random.Next(0, 10000000).ToString();
+        }
+
+        return result.Substring(0, length);
+    }
+
+    [SqlFunction]
+    public static string GetRandomAlphaStringLengthBetween(int minLength, int maxLength)
+    {
+        if (initialized == false)
+        {
+            throw new Exception(NotInitializedMessage);
+        }
+
+        string result = string.Empty;
+        int length = random.Next(minLength, maxLength + 1);
+
+        while (result.Length < length)
+        {
+            if (FlipCoin())
+            {
+                result += (char)random.Next(65, 90);
+            }
+            else
+            {
+                result += (char)random.Next(97, 122);
+            }
+        }
+
+        return result.Substring(0, length);
+    }
+
+    [SqlFunction]
+    public static string GetRandomStringLengthBetween(int minLength, int maxLength)
+    {
+        if (initialized == false)
+        {
+            throw new Exception(NotInitializedMessage);
+        }
+
+        string result = string.Empty;
+        int length = random.Next(minLength, maxLength + 1);
+
+        while (result.Length < length)
+        {
+            result += (char)random.Next(32, 126);
         }
 
         return result.Substring(0, length);

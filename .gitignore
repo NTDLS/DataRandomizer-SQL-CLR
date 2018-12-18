@@ -8,3 +8,15 @@
 *.pdb
 *.exe
 *.ilk
+*.user
+*.db-shm
+*.db-wal
+*.res
+*.ipch
+*.aps
+/Output
+/.vs
+
+DataRandomizer/bin
+DataRandomizer/obj
+DataRandomizer/debug
